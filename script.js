@@ -33,8 +33,6 @@ const account4 = {
   pin: 4444
 };
 
-const accounts = [account1, account2, account3, account4];
-
 // Elements
 const labelWelcome = document.querySelector(".welcome");
 const labelDate = document.querySelector(".date");
@@ -85,8 +83,54 @@ const displayMovements = function(movements) {
   });
 };
 
-displayMovements(account1.movements);
+//displayMovements(account1.movements);
 console.log(containerMovements.innerHTML); //shows all the html
+
+const movements = [200, 450, -400, 3000, -650, -130, 70, 1300]; //convert them in US dollar
+
+const euroToUsd = 1.1;
+
+const movementsUSD = movements.map(mov => mov * euroToUsd);
+
+const movementsDescription = movements.map(
+  (mov, i) =>
+    `Movement ${i + 1} : You ${mov > 0 ? "deposited" : "withdrew"} ${Math.abs(
+      mov
+    )}`
+);
+
+// const movementsUSD = [];
+// for (const mov of movements) {
+//   movementsUSD.push(mov * euroToUsd);
+// }
+
+// console.log(movements); //original array
+// console.log(movementsUSD); //new array
+console.log(movementsDescription); //an array with all the strings
+
+//recieves array of accounts
+const createUsernames = function(accs) {
+  //not a new array but just to modify. So not map but use forEach
+  console.log(accs); //obj //all the objs in an array
+
+  accs.forEach(function(acc) {
+    console.log(acc); //{owner: 'Jonas Schmedtmann', movements: Array(8), interestRate: 1.2, pin: 1111}
+    //one of the objects in an array
+
+    //create new property in the obj
+    //permanetly modyfyinng it
+    //no need to return
+    acc.username = acc.owner
+      .toLowerCase()
+      .split(" ")
+      .map(initial => initial[0])
+      .join("");
+  });
+};
+
+const accounts = [account1, account2, account3, account4];
+console.log(createUsernames(accounts));
+
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // LECTURES
@@ -175,18 +219,18 @@ const currencies = new Map([
   ["GBP", "Pound sterling"]
 ]);
 
-currencies.forEach(function(value, key, map) {
-  console.log(`${key} : ${value}`);
-  //USD : United States dollar
-});
+// currencies.forEach(function(value, key, map) {
+//   console.log(`${key} : ${value}`);
+//   //USD : United States dollar
+// });
 
-const currecenciesUnique = new Set(["USD", "GBP", "EUR", "EUR", "USD"]);
-console.log(currecenciesUnique); //{'USD', 'GBP', 'EUR'}
+// const currecenciesUnique = new Set(["USD", "GBP", "EUR", "EUR", "USD"]);
+// console.log(currecenciesUnique); //{'USD', 'GBP', 'EUR'}
 
-//set has no key or index
-currecenciesUnique.forEach(function(value, _, set) {
-  console.log(`${value}`);
-});
+// //set has no key or index
+// currecenciesUnique.forEach(function(value, _, set) {
+//   console.log(`${value}`);
+// });
 
 ///////////////////////////////////////
 // Coding Challenge #1
@@ -209,21 +253,21 @@ TEST DATA 2: Julia's data [9, 16, 6, 8, 3], Kate's data [10, 5, 6, 1, 4]
 GOOD LUCK 😀
 */
 
-const checkDogs = function(dogsJulia, dogsKate) {
-  const copyDogsJulia = dogsJulia.slice();
-  copyDogsJulia.splice(0, 1);
-  copyDogsJulia.splice(-2, 2);
-  console.log(copyDogsJulia);
+// const checkDogs = function(dogsJulia, dogsKate) {
+//   const copyDogsJulia = dogsJulia.slice();
+//   copyDogsJulia.splice(0, 1);
+//   copyDogsJulia.splice(-2, 2);
+//   console.log(copyDogsJulia);
 
-  const totalData = copyDogsJulia.concat(dogsKate);
+//   const totalData = copyDogsJulia.concat(dogsKate);
 
-  totalData.forEach(function(age, num) {
-    if (age > 3) {
-      console.log(`Dog number ${num + 1} is an adult, and is ${age} years old`);
-    } else if (age < 3) {
-      console.log(`Dog number ${num + 1} is still a puppy`);
-    }
-  });
-};
+//   totalData.forEach(function(age, num) {
+//     if (age > 3) {
+//       console.log(`Dog number ${num + 1} is an adult, and is ${age} years old`);
+//     } else if (age < 3) {
+//       console.log(`Dog number ${num + 1} is still a puppy`);
+//     }
+//   });
+// };
 
-checkDogs([3, 5, 2, 12, 7], [4, 1, 15, 8, 3]);
+// checkDogs([3, 5, 2, 12, 7], [4, 1, 15, 8, 3]);
