@@ -83,7 +83,7 @@ const displayMovements = function(movements) {
   });
 };
 
-//displayMovements(account1.movements);
+displayMovements(account1.movements);
 console.log(containerMovements.innerHTML); //shows all the html
 
 const movements = [200, 450, -400, 3000, -650, -130, 70, 1300]; //convert them in US dollar
@@ -128,8 +128,35 @@ const createUsernames = function(accs) {
   });
 };
 
+//array of objects
 const accounts = [account1, account2, account3, account4];
 console.log(createUsernames(accounts));
+
+const calcDisplayPrintBalance = function(movements) {
+  const balance = movements.reduce((acc, mov) => acc + mov, 0);
+  // const labelBalance = document.querySelector(".balance__value");
+  labelBalance.textContent = `${balance} euro`;
+};
+
+calcDisplayPrintBalance(account1.movements);
+
+// const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+
+const deposits = movements.filter(function(mov) {
+  return mov > 0; //only the value that passes this condiation as true would be inside the new array
+});
+
+const withdrawls = movements.filter(mov => mov < 0);
+
+//console.log(withdrawls);
+//console.log(deposits);
+
+const balance = movements.reduce(function(acc, cur, i, arr) {
+  console.log(`Iteration ${i} : ${acc}`); //Iteration 0 : 0 //Iteration 1 : 200
+  return acc + cur;
+}, 0);
+
+console.log(balance);
 
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
@@ -271,3 +298,12 @@ GOOD LUCK 😀
 // };
 
 // checkDogs([3, 5, 2, 12, 7], [4, 1, 15, 8, 3]);
+
+//Maximum value of the movement array
+
+const max = movements.reduce(
+  (acc, mov) => (acc > mov ? acc : mov),
+  movements[0]
+);
+
+console.log(max); //3000
