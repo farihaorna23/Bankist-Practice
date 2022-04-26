@@ -135,10 +135,42 @@ console.log(createUsernames(accounts));
 const calcDisplayPrintBalance = function(movements) {
   const balance = movements.reduce((acc, mov) => acc + mov, 0);
   // const labelBalance = document.querySelector(".balance__value");
-  labelBalance.textContent = `${balance} euro`;
+  labelBalance.textContent = `${balance}€`;
 };
 
 calcDisplayPrintBalance(account1.movements);
+
+const calcDisplaySummary = function(movements) {
+  const incomes = movements
+    .filter(mov => mov > 0)
+    .reduce((acc, mov) => acc + mov, 0);
+
+  //const labelSumIn = document.querySelector(".summary__value--in");
+
+  labelSumIn.textContent = `${incomes} €`;
+
+  const out = movements
+    .filter(mov => mov < 0)
+    .reduce((acc, mov) => acc + mov, 0);
+
+  //const labelSumOut = document.querySelector(".summary__value--out");
+
+  labelSumOut.textContent = `${Math.abs(out)}€`;
+
+  const interest = movements
+    .filter(mov => mov > 0)
+    .map(deposit => (deposit * 1.2) / 100)
+    .filter((int, i, arr) => {
+      console.log(arr);
+      return int >= 1;
+    })
+    .reduce((acc, cur) => acc + cur, 0);
+  //const labelSumInterest = document.querySelector(".summary__value--interest");
+
+  labelSumInterest.textContent = `${interest}€`;
+};
+
+calcDisplaySummary(account1.movements);
 
 // const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
 
@@ -336,3 +368,14 @@ GOOD LUCK 😀
 // );
 
 // console.log(max); //3000
+
+// console.log(movements); //[200, 450, -400, 3000, -650, -130, 70, 1300]
+// const totalDespositInUSD = movements
+//   .filter(mov => mov > 0)
+//   .map((mov, i, arr) => {
+//     console.log(arr);
+//     return mov * 1.1;
+//   })
+//   .reduce((acc, cur) => acc + cur, 0);
+
+// console.log(totalDespositInUSD); //5522.000000000001
