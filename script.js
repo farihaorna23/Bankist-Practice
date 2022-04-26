@@ -83,7 +83,6 @@ const displayMovements = function(movements) {
   });
 };
 
-displayMovements(account1.movements);
 console.log(containerMovements.innerHTML); //shows all the html
 
 const movements = [200, 450, -400, 3000, -650, -130, 70, 1300]; //convert them in US dollar
@@ -138,10 +137,8 @@ const calcDisplayPrintBalance = function(movements) {
   labelBalance.textContent = `${balance}€`;
 };
 
-calcDisplayPrintBalance(account1.movements);
-
-const calcDisplaySummary = function(movements) {
-  const incomes = movements
+const calcDisplaySummary = function(account) {
+  const incomes = account.movements
     .filter(mov => mov > 0)
     .reduce((acc, mov) => acc + mov, 0);
 
@@ -149,7 +146,7 @@ const calcDisplaySummary = function(movements) {
 
   labelSumIn.textContent = `${incomes} €`;
 
-  const out = movements
+  const out = account.movements
     .filter(mov => mov < 0)
     .reduce((acc, mov) => acc + mov, 0);
 
@@ -157,9 +154,9 @@ const calcDisplaySummary = function(movements) {
 
   labelSumOut.textContent = `${Math.abs(out)}€`;
 
-  const interest = movements
+  const interest = account.movements
     .filter(mov => mov > 0)
-    .map(deposit => (deposit * 1.2) / 100)
+    .map(deposit => (deposit * account.interestRate) / 100)
     .filter((int, i, arr) => {
       console.log(arr);
       return int >= 1;
@@ -169,8 +166,6 @@ const calcDisplaySummary = function(movements) {
 
   labelSumInterest.textContent = `${interest}€`;
 };
-
-calcDisplaySummary(account1.movements);
 
 // const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
 
@@ -189,6 +184,56 @@ const balance = movements.reduce(function(acc, cur, i, arr) {
 }, 0);
 
 console.log(balance);
+
+// const inputLoginPin = document.querySelector(".login__input--pin");
+
+//const btnLogin = document.querySelector(".login__btn")
+
+let currentAccount;
+
+btnLogin.addEventListener("click", function(e) {
+  e.preventDefault();
+  console.log("login");
+
+  // const inputLoginUsername = document.querySelector(".login__input--user");
+
+  //the username property is the one that has the initials
+  currentAccount = accounts.find(
+    acc => acc.username === inputLoginUsername.value
+  );
+
+  console.log(currentAccount); //{owner: 'Jessica Davis', movements: Array(8), interestRate: 1.5, pin: 2222, username: 'jd'}
+
+  // const inputLoginPin = document.querySelector(".login__input--pin");
+
+  //optional chaining. Pin property will only be read if the currentAccount exist
+  //if logged in due to matching credentials
+  if (currentAccount?.pin === Number(inputLoginPin.value)) {
+    //Display UI and message
+
+    // const labelWelcome = document.querySelector(".welcome");
+
+    labelWelcome.textContent = `Welcome back, ${
+      currentAccount.owner.split(" ")[0]
+    }`;
+
+    //clear the input field
+    inputLoginUsername.value = inputLoginPin.value = "";
+
+    //const containerApp = document.querySelector(".app");
+
+    containerApp.style.opacity = 100;
+
+    //Display movements
+    displayMovements(currentAccount.movements);
+
+    //Display Balance
+    calcDisplayPrintBalance(currentAccount.movements);
+    //Display Summary
+    calcDisplaySummary(currentAccount);
+    console.log(`loged in`);
+  }
+});
 
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
