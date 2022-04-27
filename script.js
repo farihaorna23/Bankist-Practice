@@ -268,6 +268,29 @@ btnTransfer.addEventListener("click", function(e) {
   }
 });
 
+btnClose.addEventListener("click", function(e) {
+  e.preventDefault();
+
+  console.log(`outside if loop`);
+  if (
+    inputCloseUsername.value === currentAccount.username &&
+    Number(inputClosePin.value) === currentAccount.pin
+  ) {
+    console.log(`inside if`);
+    const index = accounts.findIndex(
+      acc => acc.username === currentAccount.username
+    );
+
+    inputCloseUsername.value = inputClosePin.value = "";
+    accounts.splice(index, 1); //will mutate the original array. Will delete account
+
+    console.log(accounts); //3) [{…}, {…}, {…}]
+
+    //everythinng related to that account gets hidden away
+    containerApp.style.opacity = 0;
+  }
+});
+
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // LECTURES
