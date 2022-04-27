@@ -131,10 +131,12 @@ const createUsernames = function(accs) {
 const accounts = [account1, account2, account3, account4];
 console.log(createUsernames(accounts));
 
-const calcDisplayPrintBalance = function(movements) {
-  const balance = movements.reduce((acc, mov) => acc + mov, 0);
+const calcDisplayPrintBalance = function(account) {
+  const balance = account.movements.reduce((acc, mov) => acc + mov, 0);
+  //adding the balance proprty to the account object and storing the balance inside it
+  account.balance = balance;
   // const labelBalance = document.querySelector(".balance__value");
-  labelBalance.textContent = `${balance}€`;
+  labelBalance.textContent = `${account.balance}€`;
 };
 
 const calcDisplaySummary = function(account) {
@@ -189,6 +191,16 @@ console.log(balance);
 
 //const btnLogin = document.querySelector(".login__btn")
 
+const updateUI = function(account) {
+  //Display movements
+  displayMovements(account.movements);
+
+  //Display Balance
+  calcDisplayPrintBalance(account);
+  //Display Summary
+  calcDisplaySummary(account);
+};
+
 let currentAccount;
 
 btnLogin.addEventListener("click", function(e) {
@@ -224,14 +236,35 @@ btnLogin.addEventListener("click", function(e) {
 
     containerApp.style.opacity = 100;
 
-    //Display movements
-    displayMovements(currentAccount.movements);
+    //updateUI
+    updateUI(currentAccount);
 
-    //Display Balance
-    calcDisplayPrintBalance(currentAccount.movements);
-    //Display Summary
-    calcDisplaySummary(currentAccount);
     console.log(`loged in`);
+  }
+});
+
+btnTransfer.addEventListener("click", function(e) {
+  e.preventDefault();
+
+  const amount = Number(inputTransferAmount.value);
+  //will get the obj with the username typed in
+  const recieverAcc = accounts.find(
+    acc => acc.username === inputTransferTo.value
+  );
+
+  inputTransferAmount.value = "";
+  inputTransferTo.value = "";
+  //check if the user of the account has enough money
+  //check if the reciever exists -> optional chaining
+  if (
+    amount > 0 &&
+    recieverAcc && //exist
+    currentAccount.balance >= amount &&
+    recieverAcc?.username !== currentAccount.username
+  ) {
+    currentAccount.movements.push(-amount);
+    recieverAcc.movements.push(amount);
+    updateUI(currentAccount);
   }
 });
 
